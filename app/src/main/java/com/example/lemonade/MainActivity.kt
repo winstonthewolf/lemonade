@@ -4,38 +4,35 @@ import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material3.*
+import androidx.compose.material3.DividerDefaults.color
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.lemonade.ui.theme.LemonadeTheme
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LemonadeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    LemonadeSqueeze()
-                }
-            }
+         Lemonade()
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LemonadeSqueeze(modifier: Modifier = Modifier
     .fillMaxSize()
@@ -56,34 +53,65 @@ fun LemonadeSqueeze(modifier: Modifier = Modifier
         3 -> R.string.tap_empty_glass
         else -> R.string.tap_lemon_tree
     }
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-//        Spacer(modifier = Modifier.height(75.dp))
-        Button(
-            onClick = {
-                result++
-                if(result >=4 ){
-                    result =0
-                }
-                      }, modifier = Modifier.size(width = 200.dp, height = 200.dp)
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar( title = {
+                Text(
+                    text= "Lemonade",
+                    fontWeight = FontWeight.Bold
+                )},
 
 
 
-        ) {
 
-            Image(
-                painter = painterResource(imageResource),
-                contentDescription = result.toString()
-//                modifier = Modifier.aspectRatio(16f / 9f),
             )
-            
+
+
+
 
         }
-        Text(
-            text = stringResource(stringRes)
-        )
 
-        
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.onPrimaryContainer)
+        ) {
+
+            Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+//        Spacer(modifier = Modifier.height(75.dp))
+                Button(
+                    onClick = {
+                        result++
+                        if(result >=4 ){
+                            result =0
+                        }
+                    }, modifier = Modifier.size(width = 200.dp, height = 200.dp)
+
+
+
+                ) {
+
+                    Image(
+                        painter = painterResource(imageResource),
+                        contentDescription = result.toString()
+//                modifier = Modifier.aspectRatio(16f / 9f),
+                    )
+
+
+                }
+                Text(
+                    text = stringResource(stringRes)
+                )
+
+
+            }
+
+        }
     }
+
 }
 
 @Preview(showBackground = true)
